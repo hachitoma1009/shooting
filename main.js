@@ -20,7 +20,7 @@ window.onload = function(){
 
     //スクリーンの初期化
     //getElementByIdでcanvasへの参照を取得し大きさを変更
-    scrrenCanvas = document.getElementById('scrren');
+    scrrenCanvas = document.getElementById('screen');
     scrrenCanvas.width = 256;
     scrrenCanvas.height = 256;
 
