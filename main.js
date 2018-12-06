@@ -5,9 +5,9 @@ var screenCanvas, info; //HTMLファイルで記述したcanvasとpを参照す�
 var run = true; //ゲームの処理を継続するかどうかのフラグ
 /*false:ゲームの進行ストップ
 　true:ゲーム継続
-/
+*/
 var fps = 1000 / 30; //ゲームの更新頻度を表すFPS
-/1秒間に30回ゲームを更新
+/*1秒間に30回ゲームを更新
  */
 var mouse = new Point(); //マウスカーソルの座標を格納するためのインスタンスを作成
 
@@ -20,13 +20,13 @@ window.onload = function(){
 
     //スクリーンの初期化
     //getElementByIdでcanvasへの参照を取得し大きさを変更
-    scrrenCanvas = document.getElementById('screen');
-    scrrenCanvas.width = 256;
-    scrrenCanvas.height = 256;
+    screenCanvas = document.getElementById('screen');
+    screenCanvas.width = 256;
+    screenCanvas.height = 256;
 
     //イベントの登録
     //マウスカーソルの位置を検知する関数とキー入力を検知する関数の2つを登録
-    scrrenCanvas.addEventListener('mousemove', mouseMove, true);
+    screenCanvas.addEventListener('mousemove', mouseMove, true);
     window.addEventListener('keydown', keyDown, true);
 
     //エレメント関連
@@ -50,7 +50,7 @@ window.onload = function(){
 function mouseMove(event){
     //マウスカーソル座標の更新
     //canvas上でマウスカーソルが動いた時、スクリーン座標系のそれぞれの座標を変数mouseに設定
-    mouse.x = event.clientX - scrrenCanvas.offsetLeft;
+    mouse.x = event.clientX - screenCanvas.offsetLeft;
     mouse.y = event.clientY - screenCanvas.offsetTop;
 }
 
@@ -59,5 +59,5 @@ function keyDown(event){
     var ck = event.keyCode;
 
     //Escキーが押されていたらフラグを降ろす
-    if(ck ===27){run = false;}
+    if(ck === 27){run = false;}
 }
