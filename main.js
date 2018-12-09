@@ -3,13 +3,14 @@
 // - global --------------------------------------------
 var screenCanvas, info; //HTMLファイルで記述したcanvasとpを参照する変数
 var run = true; //ゲームの処理を継続するかどうかのフラグ
-/*false:ゲームの進行ストップ
+/*/false:ゲームの進行ストップ
 　true:ゲーム継続
 */
 var fps = 1000 / 30; //ゲームの更新頻度を表すFPS
 /*1秒間に30回ゲームを更新
  */
 var mouse = new Point(); //マウスカーソルの座標を格納するためのインスタンスを作成
+var ctx; //canvas2d コンテキスト格納用
 
 // - main ----------------------------------------------
 
@@ -24,14 +25,23 @@ window.onload = function(){
     screenCanvas.width = 256;
     screenCanvas.height = 256;
 
+    //2dコンテキスト
+    ctx = screenCanvas.getContext('2d');//変数にcanvas2dコンテキストを取得
+    /**
+    * canvas への参照を持っている変数screenCanvasのgetContextというメソッドを利用
+    * このメソッドの引数に 文字列で '2d' を渡す(わからん)
+    * これに加えてcanbas2dコンテキスト対応ブラウザか確認するコード
+    */
+
     //イベントの登録
     //マウスカーソルの位置を検知する関数とキー入力を検知する関数の2つを登録
     screenCanvas.addEventListener('mousemove', mouseMove, true);
     window.addEventListener('keydown', keyDown, true);
 
-    //エレメント関連
+    //その他のエレメント関連
     //HTML内のpタグへの参照を取得→動的に書き換えてコンソール出力みたいに使う
     info = document.getElementById('info');
+
 
     //ループ処理を呼び出す
     //ループ構造を作り画面を更新するなどの必要な処置をループ内に記述(無名関数を再帰的に呼び出す方法を使う)
@@ -39,7 +49,23 @@ window.onload = function(){
         //HTMLを更新
         info.innerHTML = mouse.x + ' : ' + mouse.y;
 
-        //フラグにより再帰呼び出し(わからん
+        //screenクリア
+        ctx.clearRect(0, 0, screenCanvas.width, screenCanvas.height);
+
+        //パスの設定を開始
+        ctx.beginPath();
+
+        //円の色を設定する
+        ctx.fillStyle = 'rgba(0, 0, 255, 0.75';
+
+        //円を描くパスを設定
+        //マウスカーソルの位置を中心とした半径 10 の円が描かれるパス
+        ctx.arc(mouse.x, mouse.y, 10, 0, Math.PI * 2, false);
+
+        //円を描く
+        ctx.fill();
+
+        //フラグにより再帰呼び出し(わからん)
         if(run){
             setTimeout(arguments.callee, fps);
         }
