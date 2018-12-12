@@ -11,6 +11,7 @@ var fps = 1000 / 30; //ゲームの更新頻度を表すFPS
  */
 var mouse = new Point(); //マウスカーソルの座標を格納するためのインスタンスを作成
 var ctx; //canvas2d コンテキスト格納用
+var CHARA_COLOR = "rgba(0, 0 255, 0.75)";
 
 // - main ----------------------------------------------
 
@@ -42,6 +43,10 @@ window.onload = function(){
     //HTML内のpタグへの参照を取得→動的に書き換えてコンソール出力みたいに使う
     info = document.getElementById('info');
 
+    //自機初期化
+    var chara = new Character();
+    chara.init(10);
+
 
     //ループ処理を呼び出す
     //ループ構造を作り画面を更新するなどの必要な処置をループ内に記述(無名関数を再帰的に呼び出す方法を使う)
@@ -55,12 +60,16 @@ window.onload = function(){
         //パスの設定を開始
         ctx.beginPath();
 
+        //自機の位置を設定
+        chara.position.x = mouse.x;
+        chara.position.y = mouse.y;
+
         //円の色を設定する
-        ctx.fillStyle = 'rgba(0, 0, 255, 0.75';
+        ctx.fillStyle = CHARA_COLOR;
 
         //円を描くパスを設定
         //マウスカーソルの位置を中心とした半径 10 の円が描かれるパス
-        ctx.arc(mouse.x, mouse.y, 10, 0, Math.PI * 2, false);
+        ctx.arc(chara.position.x, chara.position.y, chara.size, 0, Math.PI * 2, false);
 
         //円を描く
         ctx.fill();
