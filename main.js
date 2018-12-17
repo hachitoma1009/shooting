@@ -60,25 +60,6 @@ window.onload = function(){
     }
 
 
-    //fireフラグの値により分岐
-    if(fire){
-        //すべての自機ショットを調査
-        for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
-            //自機ショットが既に発射されているかチェック
-            if(!charaShot[i].alive){
-                //自機ショットを新規にセット(自機座標からサイズ3速度5のショット)
-                charaShot[i].set(chara.position, 3, 5);
-
-                //ループを抜ける
-                break;
-            }
-        }
-        //フラグを降ろしておく
-        fire = false;
-    }
-    //fireとfalseのあたり復習
-
-
     //ループ処理を呼び出す
     //ループ構造を作り画面を更新するなどの必要な処置をループ内に記述(無名関数を再帰的に呼び出す方法を使う)
     (function(){
@@ -109,37 +90,56 @@ window.onload = function(){
         if(run){
             setTimeout(arguments.callee, fps);
         }
-    })();
-};
 
-//パスの設定を開始(パス設定開始宣言→パス設定→描画命令)
-ctx.beginPath();
+        //fireフラグの値により分岐
+        if(fire){
+        //すべての自機ショットを調査
+        for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
+            //自機ショットが既に発射されているかチェック
+            if(!charaShot[i].alive){
+                //自機ショットを新規にセット(自機座標からサイズ3速度5のショット)
+                charaShot[i].set(chara.position, 3, 5);
 
-//すべての自機ショットを調査
-for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
-    //自機ショットが既に発射されているかチェック
-    if(charaShot[i].alive){
-        //自機ショットを動かす
-        charaShot[i].move();
+                //ループを抜ける
+                break;
+            }
+        }
+        //フラグを降ろしておく
+        fire = false;
+        }
 
-        //自機ショットを描くパスを設定
-        ctx.arc(
+        //パスの設定を開始(パス設定開始宣言→パス設定→描画命令)
+        ctx.beginPath();
+
+        //すべての自機ショットを調査
+        for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
+            //自機ショットが既に発射されているかチェック
+            if(charaShot[i].alive){
+            //自機ショットを動かす
+            charaShot[i].move();
+
+            //自機ショットを描くパスを設定
+            ctx.arc(
             charaShot[i].position.x,
             charaShot[i].position.y,
             charaShot[i].size,
             0, Math.PI * 2, false
-        );
+            );
 
-        //パスをいったん閉じる
-        ctx.closePath();
-    }
-}
+            //パスをいったん閉じる
+            ctx.closePath();
+            }
+        }
 
-//自機ショットの色を設定する
-ctx.fillStyle = CHARA_SHOT_COLOR;
+        //自機ショットの色を設定する
+        ctx.fillStyle = CHARA_SHOT_COLOR;
 
-//自機ショットを描く
-ctx.fill();
+        //自機ショットを描く
+        ctx.fill();
+
+    })();
+};
+    //fireとfalseのあたり復習
 
 // - event ----------------------------------------------
 function mouseMove(event){
