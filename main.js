@@ -11,7 +11,13 @@ var fps = 1000 / 30; //ゲームの更新頻度を表すFPS
  */
 var mouse = new Point(); //マウスカーソルの座標を格納するためのインスタンスを作成
 var ctx; //canvas2d コンテキスト格納用
-var CHARA_COLOR = "rgba(0, 0 255, 0.75)";
+var fire = false;//ショットを発射するか、しないか
+
+
+// - const ---------------------------------------------
+var CHARA_COLOR = 'rgba(0, 0, 255, 0.75)';
+var CHARA_SHOT_COLOR = 'rgba(0, 255, 0, 0.75)';
+var CHARA_SHOT_MAX_COUNT = 10;
 
 // - main ----------------------------------------------
 
@@ -37,6 +43,7 @@ window.onload = function(){
     //イベントの登録
     //マウスカーソルの位置を検知する関数とキー入力を検知する関数の2つを登録
     screenCanvas.addEventListener('mousemove', mouseMove, true);
+    scrrenCanvas.addEventListener('mousedown', mouseDown, true);
     window.addEventListener('keydown', keyDown, true);
 
     //その他のエレメント関連
@@ -46,6 +53,30 @@ window.onload = function(){
     //自機初期化
     var chara = new Character();
     chara.init(10);
+    //10個の自機ショットを扱うことができるように
+    var charaShot = new Array(CHARA_SHOT_MAX_COUNT);
+    for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
+        charaShot[i] = new CharacterShot();
+    }
+
+
+    //fireフラグの値により分岐
+    if(fire){
+        //すべての自機ショットを調査
+        for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
+            //自機ショットが既に発射されているかチェック
+            if(!charaShot[i].alive){
+                //自機ショットを新規にセット(自機座標からサイズ3速度5のショット)
+                charaShot[i].set(chara.position, 3, 5);
+
+                //ループを抜ける
+                break;
+            }
+        }
+        //フラグを降ろしておく
+        fire = false;
+    }
+    //fireとfalseのあたり復習
 
 
     //ループ処理を呼び出す
@@ -81,12 +112,46 @@ window.onload = function(){
     })();
 };
 
+//パスの設定を開始(パス設定開始宣言→パス設定→描画命令)
+ctx.beginPath();
+
+//すべての自機ショットを調査
+for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
+    //自機ショットが既に発射されているかチェック
+    if(charaShot[i].alive){
+        //自機ショットを動かす
+        charaShot[i].move();
+
+        //自機ショットを描くパスを設定
+        ctx.arc(
+            charaShot[i].position.x,
+            charaShot[i].position.y,
+            charaShot[i].size,
+            0, Math.PI * 2, false
+        );
+
+        //パスをいったん閉じる
+        ctx.closePath();
+    }
+}
+
+//自機ショットの色を設定する
+ctx.fillStyle = CHARA_SHOT_COLOR;
+
+//自機ショットを描く
+ctx.fill();
+
 // - event ----------------------------------------------
 function mouseMove(event){
     //マウスカーソル座標の更新
     //canvas上でマウスカーソルが動いた時、スクリーン座標系のそれぞれの座標を変数mouseに設定
     mouse.x = event.clientX - screenCanvas.offsetLeft;
     mouse.y = event.clientY - screenCanvas.offsetTop;
+}
+
+function mouseDown(event){
+    //フラグを立てる
+    file = true;
 }
 
 function keyDown(event){
