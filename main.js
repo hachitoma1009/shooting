@@ -76,12 +76,12 @@ window.onload = function(){
         chara.position.x = mouse.x;
         chara.position.y = mouse.y;
 
-        //円の色を設定する
-        ctx.fillStyle = CHARA_COLOR;
-
         //円を描くパスを設定
         //マウスカーソルの位置を中心とした半径 10 の円が描かれるパス
         ctx.arc(chara.position.x, chara.position.y, chara.size, 0, Math.PI * 2, false);
+
+        //円の色を設定する
+        ctx.fillStyle = CHARA_COLOR;
 
         //円を描く
         ctx.fill();
@@ -93,8 +93,8 @@ window.onload = function(){
 
         //fireフラグの値により分岐
         if(fire){
-        //すべての自機ショットを調査
-        for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
+            //すべての自機ショットを調査
+            for(i = 0; i < CHARA_SHOT_MAX_COUNT; i++){
             //自機ショットが既に発射されているかチェック
             if(!charaShot[i].alive){
                 //自機ショットを新規にセット(自機座標からサイズ3速度5のショット)
@@ -112,7 +112,7 @@ window.onload = function(){
 };
     //fireとfalseのあたり復習
 
-    
+
     //パスの設定を開始(パス設定開始宣言→パス設定→描画命令)
     ctx.beginPath();
 
